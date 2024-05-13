@@ -1,67 +1,74 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 public class NoteManager {
     private List<Note> notes;
-    private Scanner scanner;
+    private int nextId;
 
     public NoteManager() {
-        notes = new ArrayList<>();
-        scanner = new Scanner(System.in);
+        this.notes = new ArrayList<>();
+        this.nextId = 1;
     }
 
-    public void addNote() {
-        System.out.print("Enter note title: ");
-        String title = scanner.nextLine();
-        System.out.print("Enter note content: ");
-        String content = scanner.nextLine();
-        Note newNote = new Note(title, content);
-        notes.add(newNote);
-        System.out.println("Note added successfully with ID: " + newNote.getId());
+    public void addNote(String title, String content) {
+        Note note = new Note(nextId++, title, content);
+        notes.add(note);
+        System.out.println("Note added successfully!");
     }
 
-    public void displayAllNotes() {
+    public void viewAllNotes() {
         if (notes.isEmpty()) {
-            System.out.println("No notes found.");
+            System.out.println("No notes available.");
             return;
         }
-        System.out.println("All Notes:");
         for (Note note : notes) {
             System.out.println("ID: " + note.getId());
             System.out.println("Title: " + note.getTitle());
             System.out.println("Content: " + note.getContent());
-            System.out.println();
+            System.out.println("------------");
         }
+    }
+
+    public void deleteNote(int id) {
+        notes.removeIf(note -> note.getId() == id);
+        System.out.println("Note deleted successfully!");
     }
 
     public static void main(String[] args) {
         NoteManager noteManager = new NoteManager();
         Scanner scanner = new Scanner(System.in);
-        boolean exit = false;
 
-        while (!exit) {
-            System.out.println("1. Add new note");
-            System.out.println("2. Display all notes");
-            System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline character
+        while (true) {
+            System.out.println("1. Add Note");
+            System.out.println("2. View All Notes");
+            System.out.println("3. Delete Note");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int option = scanner.nextInt();
 
-            switch (choice) {
+            switch (option) {
                 case 1:
-                    noteManager.addNote();
+                    System.out.print("Enter title: ");
+                    String title = scanner.next();
+                    System.out.print("Enter content: ");
+                    String content = scanner.next();
+                    noteManager.addNote(title, content);
                     break;
                 case 2:
-                    noteManager.displayAllNotes();
+                    noteManager.viewAllNotes();
                     break;
                 case 3:
-                    exit = true;
+                    System.out.print("Enter note ID to delete: ");
+                    int id = scanner.nextInt();
+                    noteManager.deleteNote(id);
                     break;
+                case 4:
+                    System.out.println("Exiting...");
+                    return;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid option. Please try again.");
             }
         }
-
-        scanner.close();
     }
 }

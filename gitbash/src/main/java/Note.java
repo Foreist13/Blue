@@ -3,13 +3,12 @@ import java.util.List;
 import java.util.Scanner;
 
 class Note {
-    private static int idCounter = 0;
     private int id;
     private String title;
     private String content;
 
-    public Note(String title, String content) {
-        this.id = ++idCounter;
+    public Note(int id, String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
     }
